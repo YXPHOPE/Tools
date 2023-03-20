@@ -22,6 +22,7 @@ if    ( $^O eq 'linux' )   { system('clear'); }
 elsif ( $^O eq 'MSWin32' ) { system("cls"); }
 our $TERM_SK = eval('load Term::Sk;1;') ? 1 : 0;
 our $DEBUG = 1;
+our $dataFileName = 'mycalc.data.txt';
 if ($TERM_SK) { eval('use Term::Sk;'); }
 else {
     print RED
@@ -819,7 +820,7 @@ sub init {    ##S主启动程序E##
     };
     our @keys =
       sort { $a <=> $b } keys %$features;     ##S keys生成的数组为无序数组，每次都不同，故需给它排序E##
-    open( DATA, ">>main.data.txt" )
+    open( DATA, ">>$dataFileName" )
       || ( cluck RED "Error: 无法在工作目录打开或者创建main.data.txt!请授权！$!\n",
         $fileisopen = 0 )
       ;    ##S cluck不会像die一样强制退出，而且用fileisopen全局变量表示了文件是否打开，后面判断即可E##
