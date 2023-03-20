@@ -1,6 +1,6 @@
 import requests
+url = 'https://raw.hellogithub.com/hosts'
 def main():
-    url = 'https://raw.hellogithub.com/hosts'
     hosts = requests.get(url)
     if hosts.status_code == 200:
         newhosts = hosts.text
