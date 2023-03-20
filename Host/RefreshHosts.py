@@ -11,7 +11,9 @@ def main():
         end = old.find('#End')
         if start== -1 or end== -1:
             print('Error: Cannot find #Start or #End')
-            return 0
+            old = '#Start\n#End\n'+old
+            start = end = 7
+            print('Created #Start and #End in the head of hosts file')
         newhosts = old[:start] + newhosts + old[end:]
         with open('C:\Windows\System32\drivers\etc\hosts','w') as file:
             file.write(newhosts)
