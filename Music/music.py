@@ -23,10 +23,9 @@ def_conf = {
 config_path = sys.executable
 config = configparser.ConfigParser()
 Header = {
-    'User-Agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
     'Accept-Encoding': 'gzip, deflate, br',
-    # 'Cookie': 'PHPSESSID=nigrbvt6pdlpbelr404ngvti30', # 主要受这个cookie和下面的CORS政策影响
+    'Cookie': 'PHPSESSID=nigrbvt6pdlpbelr404ngvti30', # 主要受这个cookie和下面的CORS政策影响
     'Referer': 'https://music.ghxi.com/',
     'Origin': 'https://music.ghxi.com',
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',

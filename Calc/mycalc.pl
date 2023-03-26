@@ -1102,6 +1102,10 @@ sub calculator {    ##S计算器主程序E##
     }
     print YELLOW "退出计算器\n";
 }
+sub statistic {
+    # 概率统计
+
+}
 sub Bernoulli{
     my ($p,$k) = @_;
     my ($E,$S2) = ($p,$p*(1-$p));
@@ -1117,10 +1121,17 @@ sub Binomial{
     my @x = (0..$n);
     if(defined $k && indexof($k,\@x)>=0){return C($n,$k)*($p**$k)*($q**($n-$k));}
     print("X\t".join("\t",@x)."\n");
+    
     printf("p\t".("%6.5f\t"x($n+1))."\n",map{C($n,$_)*($p**$_)*($q**($n-$_));}@x);
 }
 # Bernoulli(0.2);
-# print Binomial(300,0.01,8);
+print Binomial(10,1/70,3);
+# my @xa = ();
+# for(0..3){
+#     push @xa,Binomial(103,0.015,$_);
+#     # print("x=$_, p=$xa[$_]\n");
+# }
+# print sum(@xa);
 sub A{
     my ($res,$sub,$sup)=(1,@_);
     for(0..$sup-1){
