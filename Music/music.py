@@ -1,10 +1,10 @@
 # 利用果核音乐的接口做的一个简易下载音乐程序
 # 0是直接退出(一路return 0)，不输是返回上一步(return -1)
-import requests
+from requests import post,get
 from json import loads as json_loads
 import traceback
 import configparser
-import sys
+from sys import executable
 # 在cmd上显示色彩有两种方法
 # 1. 引入colorama使用autoreset
 # from colorama import init
@@ -20,7 +20,7 @@ def_conf = {
     'url': 'https://music.ghxi.com/wp-admin/admin-ajax.php',
     'cookie': 'PHPSESSID=nigrbvt6pdlpbelr404ngvti30',
 }
-config_path = sys.executable
+config_path = executable
 config = configparser.ConfigParser()
 Header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
@@ -96,7 +96,7 @@ def prterr(e):
     prtfmt(errstr)
 # 检查cookie的有效性
 def check_cookie():
-    isauth = requests.post(Url, data={
+    isauth = post(Url, data={
         "action": "gh_music_ajax",
         "type": "isauth"
     }, headers=Header)
@@ -113,7 +113,7 @@ def check_cookie():
             config.write(open(config_path, 'w',encoding='utf-8'))
         except: pass # 出错只能是原来的cookie正确，只是要重新输密码认证，所以服务器没有返回新的set-cookie
         # POST密码获得验证
-        auth = requests.post(Url, data={
+        auth = post(Url, data={
             "action": "gh_music_ajax",
             "type": "postAuth",
             "code": Password
@@ -146,13 +146,13 @@ def get_song(song, T, size):
         "songid": song['songid']
     }
     prtfmt("Getting music url...",'g')
-    geturl = requests.post(Url, data=dat, headers=Header)
+    geturl = post(Url, data=dat, headers=Header)
     print('\033[1A'+' '*20+'\033[20D',end='')
     if geturl.ok:
         songurl = json_loads(geturl.text)['url']
         print(songurl)
         prtfmt('Downloading...','g')
-        download = requests.get(songurl)
+        download = get(songurl)
         print('\033[1A'+' '*14+'\033[14D',end='')
         if download.ok:
             e = '.mp3'
@@ -178,7 +178,7 @@ def search_song(name, T):
         "search_word": name
     }
     prtfmt('Searching...','g')
-    res = requests.post(Url, data=data, headers=Header)
+    res = post(Url, data=data, headers=Header)
     print('\033[1A            \033[12D',end='')
     if not res.ok:
         prtfmt('Search failed: %s' % res.status_code,'r')
@@ -194,7 +194,7 @@ def search_song(name, T):
         prterr(e)
         print(res)
         return -1
-    prtfmt('Num.\tSinger\tSong\tAlbum','c')
+    prtfmt('Num. Singer\t\tSong\t\t\tAlbum\n','c')
     cur = 1
     bg = ''
     while True:
@@ -206,11 +206,11 @@ def search_song(name, T):
             if cur>=len(list):
                 prtfmt('No more results','r')
                 continue
-            print('\033[1A'+' '*20+'\033[20D',end='')
+            print('\033[1A'+' '*40+'\033[40D',end='')
             for i in list[cur-1:cur+9]:
                 if cur % 2:bg = '\033[37m'
                 else : bg = '\033[35m'
-                print(bg+'%d\t%s\t%s\t%s\033[0m' %
+                print(bg+'%-5d%-8s\t%-14s\t%s\033[0m' %
                   (cur, i['singer'], i['songname'], i['albumname']))
                 cur += 1
             continue
