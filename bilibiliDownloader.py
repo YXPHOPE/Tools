@@ -1,17 +1,17 @@
 # 哔哩哔哩下载器
 version = '1.0.1'
 decription = 'bilibiliDownloader'
-import requests as req
-import os
-import sys
-import time
+from requests import get
+from os import system,path,makedirs
+from sys import argv
+from time import localtime,strftime
 def main():
     print('bilibili Downloader  v'+version)
     # 文件名、音频地址、视频地址
-    arg = sys.argv
+    arg = argv
     key = ['-v','-o','-a','-p','-n']
     config = {}
-    path = 'D:\\download\\'
+    savepath = 'D:\\download\\'
     for i in range(1, len(arg)):
         s = arg[i]
         if s in key:
@@ -19,15 +19,15 @@ def main():
     if '-o' in config or '-p' in config:
         s = config['-o'] if '-o' in config else config['-p']
         if '\\' in s:
-            path = s[:s.rfind('\\')+1]
+            savepath = s[:s.rfind('\\')+1]
             if '-n' not in config:
                 config['-n'] = s[s.rfind('\\')+1:]
-            if not os.path.exists(path):
-                os.makedirs(path)
+            if not path.exists(savepath):
+                makedirs(savepath)
     if '-v' in config or '-a' in config:
         s = config['-v'] if '-v' in config else config['-a']
         i = s.rfind('/')+1
-        if '-n' not in config:config['-n'] = time.strftime("%Y%m%d-%H%M%S", time.localtime())+'-'+s[i:s.find('.',i)]
+        if '-n' not in config:config['-n'] = strftime("%Y%m%d-%H%M%S", localtime())+'-'+s[i:s.find('.',i)]
     else:
         print('参数错误')
         return 0
@@ -37,14 +37,14 @@ def main():
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0'
     }
     def download(url, name=None, header=None):
-        res = req.get(url, headers=header)
+        res = get(url, headers=header)
         if res.ok and name != None:
             with open(name, 'wb') as f:
                 f.write(res.content)
                 print('Downloaded:',name)
         else:print('name:%s, code:%d\nurl:%s'%(name,res.status_code,url))
     # 下载
-    name = path+config['-n']
+    name = savepath+config['-n']
     try:
         if '-a' in config:
             print('audio...')
@@ -53,9 +53,9 @@ def main():
             print('video...')
             download(config['-v'],name=name+'.v.mp4',header=header)
         if '-a' in config and '-v' in config:
-            s = 'ffmpeg -i "%s" -i "%s" -c:v copy -c:a copy -bsf:a aac_adtstoasc "%s"'%(name+'.mp3',name+'.v.mp4',name+'.mp4'+' -loglevel 8')
+            s = 'ffmpeg -i "%s" -i "%s" -c:v copy -c:a copy -bsf:a aac_adtstoasc "%s" -loglevel 8'%(name+'.mp3',name+'.v.mp4',name+'.mp4')
             print('Merging...\n'+s)
-            os.system(s)
+            system(s)
     except Exception as e:
         print("Error: "+str(e))
 if __name__ == '__main__':
