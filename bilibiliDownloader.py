@@ -53,7 +53,7 @@ def main():
             print('video...')
             download(config['-v'],name=name+'.v.mp4',header=header)
         if '-a' in config and '-v' in config:
-            s = 'ffmpeg -i %s -i %s -c:v copy -c:a copy -bsf:a aac_adtstoasc %s'%(name+'.mp3',name+'.v.mp4',name+'.mp4'+' -loglevel 8')
+            s = 'ffmpeg -i "%s" -i "%s" -c:v copy -c:a copy -bsf:a aac_adtstoasc "%s"'%(name+'.mp3',name+'.v.mp4',name+'.mp4'+' -loglevel 8')
             print('Merging...\n'+s)
             os.system(s)
     except Exception as e:

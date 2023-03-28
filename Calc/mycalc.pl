@@ -1129,7 +1129,7 @@ print Binomial(10,1/70,3);
 # my @xa = ();
 # for(0..3){
 #     push @xa,Binomial(103,0.015,$_);
-#     # print("x=$_, p=$xa[$_]\n");
+#     # print("x=$_, p=$xa[$_]\n");9342056448
 # }
 # print sum(@xa);
 sub A{
